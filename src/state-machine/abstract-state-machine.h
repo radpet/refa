@@ -3,6 +3,10 @@
 
 
 class AbstractStateMachine{
+private:
+
+
+public:
 
 
 };
