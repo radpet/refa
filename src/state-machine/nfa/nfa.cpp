@@ -1,8 +1,7 @@
 #include "nfa.h"
 
 NFA::NFA() {
-    startState = nullptr;
-    finalState = nullptr;
+
 }
 
 NFA::NFA(const NFA &other) {
@@ -10,24 +9,20 @@ NFA::NFA(const NFA &other) {
 }
 
 NFA::NFA(State &startState, State &finalState) {
-    this->startState = new State(startState);
-    this->finalState = new State(finalState);
-
-    if (startState == finalState) {
-        states.push_back(*(this->startState));
-    } else {
-        states.push_back(*(this->startState));
-        states.push_back(*(this->finalState));
-    }
-
+    setStartState(startState);
+    setFinalState(finalState);
 }
 
 NFA::~NFA() {
-    delete finalState;
+    for (State *state : states) {
+        delete state;
+    }
+    states.clear();
 }
 
 void NFA::swap(const NFA &other) {
-    *finalState = *other.finalState;
+    startState = new State(*other.startState);
+    finalState = new State(*other.finalState);
     states = other.states;
 }
 
@@ -39,12 +34,13 @@ NFA &NFA::operator=(const NFA &other) {
 NFA *NFA::concat(AbstractStateMachine &other) {
     NFA &toConcat = dynamic_cast<NFA &>(other);
     if (&toConcat) {
-        for (auto state : toConcat.getStates()) {
+        for (int i = 0; i < toConcat.getStates().size(); i++) {
+            State *state = new State(*toConcat.getStates()[i]);
             states.push_back(state);
         }
         Transition transition = Transition(toConcat.getStartState(), Transition::EPSILON);
-        finalState->addTransition(transition);
-        setFinalState(toConcat.getFinalState());
+        finalState->addTransition(toConcat.getStartState(), Transition::EPSILON);
+        setFinalState(*toConcat.getFinalState());
     }
     return this;
 
@@ -54,10 +50,45 @@ NFA *NFA::kleene() {}
 
 NFA *NFA::_union(AbstractStateMachine &other) {}
 
-void NFA::setStartState(State *startState) {
-    *(this->startState) = *startState;
+
+bool NFA::hasState(State &state) {
+    if (findState(state) == nullptr) {
+        return false;
+    }
+    return true;
 }
 
-void NFA::setFinalState(State *finalState) {
-    *(this->finalState) = *finalState;
+State *NFA::findState(State &state) {
+    for (int i = 0; i < states.size(); i++) {
+        if (*states[i] == state) {
+            return states[i];
+        }
+    }
+    return nullptr;
+}
+
+void NFA::updateStartOrFinalState(State **startOrFinal, State &state) { //cool double pointers why?
+
+    if (hasState(state)) {
+        *startOrFinal = findState(state);
+    } else {
+        *startOrFinal = new State(state);
+        states.push_back(&(**startOrFinal));
+    }
+}
+
+void NFA::setStartState(State &startState) {
+    updateStartOrFinalState(&this->startState, startState);
+}
+
+void NFA::setFinalState(State &finalState) {
+    updateStartOrFinalState(&this->finalState, finalState);
+}
+
+State *NFA::getStartState() {
+    return startState;
+}
+
+State *NFA::getFinalState() {
+    return finalState;
 }

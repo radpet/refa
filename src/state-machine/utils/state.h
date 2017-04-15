@@ -17,7 +17,6 @@ public:
 
     State(const State &other);
 
-
     bool operator==(const State &other);
 
     bool addTransition(Transition &transition);

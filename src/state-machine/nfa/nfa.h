@@ -6,11 +6,13 @@
 
 class NFA : public AbstractStateMachine {
 private:
-    std::vector<State> states;
-    State *startState;
-    State *finalState;
+    std::vector<State*> states;
+    State *startState = nullptr;
+    State *finalState = nullptr;
 
     void swap(const NFA &other);
+
+    void updateStartOrFinalState(State **startOrFinal, State &state);
 
 public:
     NFA();
@@ -29,22 +31,22 @@ public:
 
     NFA *_union(AbstractStateMachine &other);
 
-    std::vector<State> &getStates() {
+    bool hasState(State &state);
+
+    State *findState(State &state);
+
+    void setStartState(State &startState);
+
+    void setFinalState(State &finalState);
+
+    std::vector<State*> &getStates() {
         return states;
     }
 
+    State *getStartState();
 
-    State *getStartState() {
-        return startState;
-    }
+    State *getFinalState();
 
-    State *getFinalState() {
-        return finalState;
-    }
-
-    void setStartState(State *startState);
-
-    void setFinalState(State *finalState);
 
 };
 
