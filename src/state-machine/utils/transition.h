@@ -3,20 +3,23 @@
 
 #include "state.h"
 
+class State;
+
 class Transition {
 private:
-    State *from;
     State *to;
     char label;
 public:
-    Transition(State &from, State &to, char label);
+    static const char EPSILON;
 
-    State &getFrom();
+    Transition(State &to, char label);
 
-    State &getTo();
+    Transition(State *to, char label);
+
+    State *getTo();
 
     char getLabel();
 
 };
 
-#endif TRANSITION_H
+#endif

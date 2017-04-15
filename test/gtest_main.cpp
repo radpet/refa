@@ -3,6 +3,7 @@
 
 #include "state-machine/utils/state-test.cpp"
 #include "state-machine/utils/transition-test.cpp"
+#include "state-machine/nfa/nfa-test.cpp"
 
 int main(int argc, char **argv) {
     printf("Running tests good luck from gtest_main.cpp\n");
