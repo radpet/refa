@@ -2,6 +2,11 @@
 
 const char Transition::EPSILON = 'e';
 
+Transition::Transition(const Transition &other) {
+    this->to = other.getTo();
+    this->label = other.getLabel();
+}
+
 Transition::Transition(State &to, char label) {
     this->to = &to;
     this->label = label;
@@ -13,10 +18,10 @@ Transition::Transition(State *to, char label) {
 }
 
 
-State *Transition::getTo() {
+State *Transition::getTo() const {
     return to;
 }
 
-char Transition::getLabel() {
+char Transition::getLabel() const {
     return label;
 }

@@ -16,7 +16,8 @@ TEST(StateTest, ItShouldCreateAStateObjectWithId) {
 TEST(StateTest, ItShouldAddTransitionAsObj) {
     State state = State(1);
     State mockState = State(2);
-    Transition mockTransition = Transition(&mockState, 'a');
+    char mockLabel = 'a';
+    Transition mockTransition = Transition(&mockState, mockLabel);
     state.addTransition(mockTransition);
 
     ASSERT_EQ(state.getTransitions().size(), 1);
@@ -28,7 +29,7 @@ TEST(StateTest, ItShouldAddTransitionAsStateAndLabel) {
     state.addTransition(mockState, 'a');
 
     ASSERT_EQ(state.getTransitions().size(), 1);
-    ASSERT_TRUE(*(state.getTransitions()[0].getTo()) == mockState);
+    ASSERT_TRUE(*(state.getTransitions()[0]->getTo()) == mockState);
 }
 
 

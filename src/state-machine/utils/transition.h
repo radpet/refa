@@ -3,6 +3,7 @@
 
 #include "state.h"
 
+// @TODO why should I use forward declaration here?
 class State;
 
 class Transition {
@@ -12,13 +13,17 @@ private:
 public:
     static const char EPSILON;
 
+    Transition(Transition *other);
+
+    Transition(const Transition &other);
+
     Transition(State &to, char label);
 
     Transition(State *to, char label);
 
-    State *getTo();
+    State *getTo() const;
 
-    char getLabel();
+    char getLabel() const;
 
 };
 

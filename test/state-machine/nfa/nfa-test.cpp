@@ -67,6 +67,6 @@ TEST(NFA_TEST, ItShouldConcatAnotherNFA) {
     // it should have only 1 eps transition
     // from the final state of the first to the start state of the second
 
-    ASSERT_EQ(nfaFinalStateBeforeConcat->getTransitions()[0].getLabel(), Transition::EPSILON);
+    ASSERT_EQ(nfaFinalStateBeforeConcat->getTransitions()[0]->getLabel(), Transition::EPSILON);
     ASSERT_TRUE(*nfa.getFinalState() == *mockNFA.getStartState());
 }
