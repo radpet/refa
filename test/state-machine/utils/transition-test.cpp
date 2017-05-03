@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "state-machine/utils/transition.cpp"
-#include "state-machine/utils/state.cpp" //why should I include the source file and not the header?
+#include "state-machine/utils/transition.h"
+#include "state-machine/utils/state.h"
 
 TEST(TransitionTest, ItShouldCreateATransitionObjectFromReference) {
     State mockStateTo = State(2);
