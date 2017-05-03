@@ -34,6 +34,8 @@ NFA &NFA::operator=(const NFA &other) {
     return *this;
 }
 
+// Add all states to the current nfa
+// Add epsilon transition from the current final to the other start and change the current final state
 NFA *NFA::concat(NFA &other) {
 
     for (int i = 0; i < other.getStates().size(); i++) {
@@ -41,16 +43,33 @@ NFA *NFA::concat(NFA &other) {
         states.push_back(state);
     }
     Transition transition = Transition(other.getStartState(), Transition::EPSILON);
-    finalState->addTransition(other.getStartState(), Transition::EPSILON);
+    finalState->addTransition(transition);
     setFinalState(*other.getFinalState());
 
     return this;
 
 }
 
-NFA *NFA::kleene() {}
+NFA *NFA::kleene() {
 
-NFA *NFA::_union(NFA &other) {}
+    State newStart = State(states.size() + 1);
+    State newFinal = State(states.size() + 2);
+
+    newStart.addTransition(newFinal, Transition::EPSILON);
+    newStart.addTransition(startState, Transition::EPSILON);
+
+    finalState->addTransition(newFinal, Transition::EPSILON);
+    finalState->addTransition(startState, Transition::EPSILON);
+
+    setStartState(newStart);
+    setFinalState(newFinal);
+
+    return this;
+}
+
+NFA *NFA::_union(NFA &other) {
+
+}
 
 
 bool NFA::hasState(State &state) {
@@ -69,13 +88,15 @@ State *NFA::findState(State &state) {
     return nullptr;
 }
 
-void NFA::updateStartOrFinalState(State **startOrFinal, State &state) { //cool double pointers why?
+// First check if we have the state in the current states by looking at its id
+// If it is not found deep copy the state and add it to the states;
+void NFA::updateStartOrFinalState(State **startOrFinal, State &state) {
 
     if (hasState(state)) {
         *startOrFinal = findState(state);
     } else {
         *startOrFinal = new State(state);
-        states.push_back(&(**startOrFinal));
+        states.push_back(*startOrFinal);
     }
 }
 

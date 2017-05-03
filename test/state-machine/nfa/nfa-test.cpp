@@ -17,6 +17,7 @@ TEST(NFA_TEST, ItCreateNFAWithOneState) {
     ASSERT_EQ(nfa.getStates().size(), 1);
 }
 
+//@TODO this might be failing because the parent obj has been deleted
 TEST(NFA_TEST, ItShouldDeleteAllStates) {
     State a = State(1);
     NFA *nfa = new NFA(a, a);
@@ -27,7 +28,7 @@ TEST(NFA_TEST, ItShouldDeleteAllStates) {
 
     delete nfa;
 
-    // ASSERT_TRUE(states.empty()); @TODO check why this is failing
+    //ASSERT_TRUE(states.empty());
 }
 
 TEST(NFA_TEST, ItShouldFindState) {
@@ -59,7 +60,7 @@ TEST(NFA_TEST, ItShouldSetStartState) {
     ASSERT_TRUE(*nfa.getStartState() == startState);
 }
 
-TEST(NFA_TEST, ItShouldConcatAnotherNFA) {
+TEST(NFA_TEST_CONCAT, ItShouldConcatAnotherNFA) {
     State a = State(1);
     NFA nfa = NFA(a, a);
     State *nfaFinalStateBeforeConcat = nfa.getFinalState();
@@ -75,4 +76,22 @@ TEST(NFA_TEST, ItShouldConcatAnotherNFA) {
 
     ASSERT_EQ(nfaFinalStateBeforeConcat->getTransitions()[0]->getLabel(), Transition::EPSILON);
     ASSERT_TRUE(*nfa.getFinalState() == *mockNFA.getStartState());
+}
+
+TEST(NFA_TEST_KLEENE, ItShouldMakeKleeneStarTransformation) {
+    State a = State(1);
+    NFA nfa = NFA(a, a);
+    State *finalStateBeforeKleene = nfa.getFinalState();
+    nfa.kleene();
+
+    // it should have 3 states since we begin with 1 and kleene star adds 2 more
+    ASSERT_EQ(nfa.getStates().size(), 3);
+
+    // we should have 2 eps transitions from start
+    ASSERT_EQ(nfa.getStartState()->getTransitions()[0]->getLabel(), Transition::EPSILON);
+    ASSERT_EQ(nfa.getStartState()->getTransitions()[1]->getLabel(), Transition::EPSILON);
+
+    // we should have 2 eps transitions from old final state
+    ASSERT_EQ(finalStateBeforeKleene->getTransitions()[0]->getLabel(), Transition::EPSILON);
+    ASSERT_EQ(finalStateBeforeKleene->getTransitions()[1]->getLabel(), Transition::EPSILON);
 }

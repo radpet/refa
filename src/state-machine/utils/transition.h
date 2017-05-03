@@ -13,12 +13,18 @@ private:
 public:
     static const char EPSILON;
 
+    ~Transition();
+
+    // Deep copy the label and state it points to
     Transition(Transition *other);
 
+    // Deep copy the transition object passed as param
     Transition(const Transition &other);
 
+    // Deep copy the state
     Transition(State &to, char label);
 
+    // Deep copy the state the pointer points
     Transition(State *to, char label);
 
     State *getTo() const;

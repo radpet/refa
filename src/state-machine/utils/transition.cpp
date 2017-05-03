@@ -2,6 +2,10 @@
 
 const char Transition::EPSILON = 'e';
 
+Transition::~Transition() {
+    delete to;
+}
+
 Transition::Transition(const Transition &other) {
     this->to = new State(*other.to);
     this->label = other.getLabel();

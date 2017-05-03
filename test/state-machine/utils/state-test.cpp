@@ -1,7 +1,7 @@
 #include "state-machine/utils/state.h"
+#include "state-machine/utils/transition.h"
 
 #include "gtest/gtest.h"
-
 
 TEST(StateTest, ItShouldCreateAStateObjectWithDefaultId) {
     State state = State();
@@ -33,7 +33,6 @@ TEST(StateTest, ItShouldAddTransitionAsStateAndLabel) {
     ASSERT_EQ(state.getTransitions().size(), 1);
     ASSERT_TRUE(*(state.getTransitions()[0]->getTo()) == mockState);
 }
-
 
 TEST(StateTest, ItShouldDeepCopyState) {
     State state = State(1);

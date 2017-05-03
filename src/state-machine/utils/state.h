@@ -14,6 +14,10 @@ public:
 
     State(unsigned int id = 0);
 
+    // Deep copy the transitions
+    State(unsigned int id, std::vector<Transition *> &transitions);
+
+    // Deep copy the id and transitions from other state
     State(const State &other);
 
     ~State();
