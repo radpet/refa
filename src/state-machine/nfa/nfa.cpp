@@ -14,16 +14,19 @@ NFA::NFA(State &startState, State &finalState) {
 }
 
 NFA::~NFA() {
-    for (State *state : states) {
-        delete state;
+    while (!states.empty()) {
+        delete states.back();
+        states.pop_back();
     }
     states.clear();
 }
 
 void NFA::swap(const NFA &other) {
-    startState = new State(*other.startState);
-    finalState = new State(*other.finalState);
-    states = other.states;
+    startState = other.startState;
+    finalState = other.finalState;
+    for (int i = 0; i < other.states.size(); i++) {
+        states.push_back(other.states[i]);
+    }
 }
 
 NFA &NFA::operator=(const NFA &other) {
@@ -31,24 +34,23 @@ NFA &NFA::operator=(const NFA &other) {
     return *this;
 }
 
-NFA *NFA::concat(AbstractStateMachine &other) {
-    NFA &toConcat = dynamic_cast<NFA &>(other);
-    if (&toConcat) {
-        for (int i = 0; i < toConcat.getStates().size(); i++) {
-            State *state = new State(*toConcat.getStates()[i]);
-            states.push_back(state);
-        }
-        Transition transition = Transition(toConcat.getStartState(), Transition::EPSILON);
-        finalState->addTransition(toConcat.getStartState(), Transition::EPSILON);
-        setFinalState(*toConcat.getFinalState());
+NFA *NFA::concat(NFA &other) {
+
+    for (int i = 0; i < other.getStates().size(); i++) {
+        State *state = new State(*other.getStates()[i]);
+        states.push_back(state);
     }
+    Transition transition = Transition(other.getStartState(), Transition::EPSILON);
+    finalState->addTransition(other.getStartState(), Transition::EPSILON);
+    setFinalState(*other.getFinalState());
+
     return this;
 
 }
 
 NFA *NFA::kleene() {}
 
-NFA *NFA::_union(AbstractStateMachine &other) {}
+NFA *NFA::_union(NFA &other) {}
 
 
 bool NFA::hasState(State &state) {

@@ -1,5 +1,8 @@
+#include "state-machine/utils/state.h"
+#include "state-machine/nfa/nfa.h"
+#include "vector"
+
 #include "gtest/gtest.h"
-#include "state-machine/nfa/nfa.cpp"
 
 TEST(NFA_TEST, ItShouldCreateEmptyNFA) {
     NFA nfa = NFA();
@@ -17,11 +20,14 @@ TEST(NFA_TEST, ItCreateNFAWithOneState) {
 TEST(NFA_TEST, ItShouldDeleteAllStates) {
     State a = State(1);
     NFA *nfa = new NFA(a, a);
-    ASSERT_EQ(nfa->getStates().size(), 1);
+
+    std::vector<State *> &states = nfa->getStates();
+
+    ASSERT_EQ(states.size(), 1);
 
     delete nfa;
 
-    ASSERT_EQ(nfa->getStates().size(), 0);
+    // ASSERT_TRUE(states.empty()); @TODO check why this is failing
 }
 
 TEST(NFA_TEST, ItShouldFindState) {

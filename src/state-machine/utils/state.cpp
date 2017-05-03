@@ -4,8 +4,12 @@ State::State(unsigned int id) {
     this->id = id;
 }
 
+// Deep copy the state
 State::State(const State &other) {
-    *this = other;
+    id = other.id;
+    for (int i = 0; i < other.transitions.size(); i++) {
+        transitions.push_back(new Transition(*other.transitions[i]));
+    }
 }
 
 State::~State() {
@@ -32,7 +36,7 @@ void State::addTransition(Transition &other) {
 }
 
 void State::addTransition(Transition *transition) {
-    transitions.push_back(transition);
+    transitions.push_back(new Transition(*transition));
 };
 
 void State::addTransition(State &to, char label) {

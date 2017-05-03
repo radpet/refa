@@ -4,6 +4,8 @@
 #include<vector>
 #include "transition.h"
 
+class Transition;
+
 class State {
 private:
     unsigned int id;
@@ -22,7 +24,6 @@ public:
 
     void addTransition(Transition &transition);
 
-    // If you pass a pointer we do not copy it and assume it is dynamic pointer we take care of its memory management
     void addTransition(Transition *transition);
 
     void addTransition(State &to, char label);
