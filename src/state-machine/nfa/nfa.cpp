@@ -1,5 +1,9 @@
 #include "nfa.h"
 
+unsigned int max(int a, int b) {
+    return a < b ? b : a;
+}
+
 NFA::NFA() {
 
 }
@@ -8,7 +12,8 @@ NFA::NFA(const NFA &other) {
     *this = other;
 }
 
-NFA::NFA(State &startState, State &finalState) {
+NFA::NFA(State &startState, State &finalState, unsigned int automataId) {
+    this->automataId = automataId;
     setStartState(startState);
     setFinalState(finalState);
 }
@@ -24,6 +29,7 @@ NFA::~NFA() {
 void NFA::swap(const NFA &other) {
     startState = other.startState;
     finalState = other.finalState;
+    automataId = other.automataId;
     for (int i = 0; i < other.states.size(); i++) {
         states.push_back(other.states[i]);
     }
@@ -37,23 +43,23 @@ NFA &NFA::operator=(const NFA &other) {
 // Add all states to the current nfa
 // Add epsilon transition from the current final to the other start and change the current final state
 NFA *NFA::concat(NFA &other) {
-
+    int newAutomataId = generateNewAutomataId(automataId, other.getAutomataId());
     for (int i = 0; i < other.getStates().size(); i++) {
-        State *state = new State(*other.getStates()[i]);
-        states.push_back(state);
+        states.push_back(new State(*other.getStartState()));
     }
     Transition transition = Transition(other.getStartState(), Transition::EPSILON);
     finalState->addTransition(transition);
     setFinalState(*other.getFinalState());
 
-    return this;
+    automataId = newAutomataId;
 
+    return this;
 }
 
 NFA *NFA::kleene() {
 
-    State newStart = State(states.size() + 1);
-    State newFinal = State(states.size() + 2);
+    State newStart = State(states.size() + 1, automataId);
+    State newFinal = State(states.size() + 2, automataId);
 
     newStart.addTransition(newFinal, Transition::EPSILON);
     newStart.addTransition(startState, Transition::EPSILON);
@@ -69,8 +75,31 @@ NFA *NFA::kleene() {
 
 NFA *NFA::_union(NFA &other) {
 
+    for (int i = 0; i < other.getStates().size(); i++) {
+        states.push_back(new State(*other.getStates()[i]));
+    }
+
+    int newAutomataId = generateNewAutomataId(automataId, other.getAutomataId());
+    State newStart = State(1, newAutomataId);
+    State newFinal = State(2, newAutomataId);
+
+    newStart.addTransition(startState, Transition::EPSILON);
+    newStart.addTransition(findState(*other.getStartState()), Transition::EPSILON);
+
+    finalState->addTransition(newFinal, Transition::EPSILON);
+    findState(*other.getFinalState())->addTransition(newFinal, Transition::EPSILON);
+
+    setStartState(newStart);
+    setFinalState(newFinal);
+
+    automataId = newAutomataId;
+
+    return this;
 }
 
+unsigned int NFA::generateNewAutomataId(unsigned int oldId, unsigned int otherId) {
+    return max(oldId, otherId) + 1;
+}
 
 bool NFA::hasState(State &state) {
     if (findState(state) == nullptr) {

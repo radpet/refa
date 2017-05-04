@@ -8,14 +8,17 @@ class Transition;
 
 class State {
 private:
+    // fist index internal for automata
     unsigned int id;
+    // second index to distinguish states
+    unsigned int automataId;
     std::vector<Transition *> transitions;
 public:
 
-    State(unsigned int id = 0);
+    State(unsigned int id = 0, unsigned int automataId = 0);
 
     // Deep copy the transitions
-    State(unsigned int id, std::vector<Transition *> &transitions);
+    State(unsigned int id, unsigned int automataId, std::vector<Transition *> &transitions);
 
     // Deep copy the id and transitions from other state
     State(const State &other);
@@ -37,6 +40,10 @@ public:
     unsigned int getId() const {
         return id;
     }
+
+    unsigned int getSecondId() const {
+        return automataId;
+    };
 
     std::vector<Transition *> getTransitions();
 

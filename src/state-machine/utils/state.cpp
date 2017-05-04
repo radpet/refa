@@ -1,11 +1,12 @@
 #include "state.h"
 
-State::State(unsigned int id) {
+State::State(unsigned int id, unsigned int automataId) {
     this->id = id;
+    this->automataId = automataId;
 }
 
-State::State(unsigned int id, std::vector<Transition *> &transitions) {
-    *this = State(id, transitions);
+State::State(unsigned int id, unsigned int automataId, std::vector<Transition *> &transitions) {
+    *this = State(id, automataId, transitions);
 }
 
 State::State(const State &other) {
@@ -21,13 +22,14 @@ State::~State() {
 
 State &State::operator=(const State &other) {
     id = other.id;
+    automataId = other.automataId;
     for (Transition *transition:other.transitions) {
         transitions.push_back(new Transition(*transition));
     }
 }
 
 bool State::operator==(const State &other) {
-    return id == other.id;
+    return id == other.id && automataId == other.automataId;
 }
 
 void State::addTransition(Transition &other) {

@@ -26,8 +26,8 @@ TEST(StateTest, ItShouldAddTransitionAsObj) {
 }
 
 TEST(StateTest, ItShouldAddTransitionAsStateAndLabel) {
-    State state = State(1);
-    State mockState = State(2);
+    State state = State(1,1);
+    State mockState = State(2,1);
     state.addTransition(mockState, 'a');
 
     ASSERT_EQ(state.getTransitions().size(), 1);

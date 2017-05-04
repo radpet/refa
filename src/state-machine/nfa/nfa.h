@@ -5,11 +5,14 @@
 
 class NFA {
 private:
-    std::vector<State*> states;
+    unsigned int automataId;
+    std::vector<State *> states;
     State *startState = nullptr;
     State *finalState = nullptr;
 
     void swap(const NFA &other);
+
+    unsigned int generateNewAutomataId(unsigned int oldId, unsigned int otherId);
 
     void updateStartOrFinalState(State **startOrFinal, State &state);
 
@@ -20,7 +23,7 @@ public:
 
     NFA(const NFA &other);
 
-    NFA(State &startState, State &finalState);
+    NFA(State &startState, State &finalState, unsigned int automataId = 0);
 
     NFA &operator=(const NFA &other);
 
@@ -38,8 +41,16 @@ public:
 
     void setFinalState(State &finalState);
 
-    std::vector<State*> &getStates() {
+    std::vector<State *> &getStates() {
         return states;
+    }
+
+    void setAutomataId(unsigned int automataId) {
+        this->automataId = automataId;
+    }
+
+    unsigned int getAutomataId() const {
+        return automataId;
     }
 
     State *getStartState();
