@@ -22,7 +22,6 @@ add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
         ${CMAKE_BINARY_DIR}/googletest-build)
 
 
-
 set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
@@ -34,12 +33,13 @@ set(SOURCES
         src/state-machine/utils/transition.h
         src/state-machine/utils/state.h
         src/state-machine/nfa/nfa.h
+        src/regular-expression/regular-expression.h
+
 
         src/state-machine/utils/transition.cpp
         src/state-machine/utils/state.cpp
         src/state-machine/nfa/nfa.cpp
-
-
+        src/regular-expression/regular-expression.cpp
         )
 
 set(TEST_RUNNER
