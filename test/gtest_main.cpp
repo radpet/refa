@@ -5,7 +5,9 @@
 #include "state-machine/utils/transition-test.cpp"
 #include "state-machine/nfa/nfa-test.cpp"
 
-#include "regular-expression/regular-expression-test.cpp";
+#include "regular-expression/regular-expression-test.cpp"
+
+#include "parser/operator-test.cpp"
 
 int main(int argc, char **argv) {
     printf("Running tests good luck from gtest_main.cpp\n");

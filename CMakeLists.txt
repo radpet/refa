@@ -34,12 +34,16 @@ set(SOURCES
         src/state-machine/utils/state.h
         src/state-machine/nfa/nfa.h
         src/regular-expression/regular-expression.h
+        src/compiler/compiler.h
+        src/parser/operator.h
 
 
         src/state-machine/utils/transition.cpp
         src/state-machine/utils/state.cpp
         src/state-machine/nfa/nfa.cpp
         src/regular-expression/regular-expression.cpp
+        src/compiler/compiler.cpp
+        src/parser/operator.cpp
         )
 
 set(TEST_RUNNER
