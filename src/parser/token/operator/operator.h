@@ -1,10 +1,9 @@
 #ifndef REFA_OPERATOR_H
 #define REFA_OPERATOR_H
 
+#include "parser/token/token.h"
 
-class Operator {
-private:
-    char value;
+class Operator : public Token {
 public:
     static const char STAR = '*';
     static const char UNION = '|';
@@ -14,8 +13,6 @@ public:
     static bool canBeOperator(char op);
 
     Operator(char op);
-
-    char getValue() const;
 
 };
 

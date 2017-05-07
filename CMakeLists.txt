@@ -35,15 +35,20 @@ set(SOURCES
         src/state-machine/nfa/nfa.h
         src/regular-expression/regular-expression.h
         src/compiler/compiler.h
-        src/parser/operator.h
-
+        src/parser/token/operator/operator.h
+        src/parser/token/letter/letter.h
+        src/parser/token/parsed-token.h
+        src/parser/parser.h
 
         src/state-machine/utils/transition.cpp
         src/state-machine/utils/state.cpp
         src/state-machine/nfa/nfa.cpp
         src/regular-expression/regular-expression.cpp
         src/compiler/compiler.cpp
-        src/parser/operator.cpp
+        src/parser/token/operator/operator.cpp
+        src/parser/token/letter/letter.cpp
+        src/parser/token/parsed-token.cpp
+        src/parser/parser.cpp
         )
 
 set(TEST_RUNNER

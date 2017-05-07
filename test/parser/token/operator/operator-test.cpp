@@ -1,4 +1,4 @@
-#include "parser/operator.h"
+#include "parser/token/operator/operator.h"
 
 #include "gtest/gtest.h"
 

@@ -7,7 +7,10 @@
 
 #include "regular-expression/regular-expression-test.cpp"
 
-#include "parser/operator-test.cpp"
+#include "parser/token/operator/operator-test.cpp"
+#include "parser/parser-test.cpp"
+
+#include "compiler/compiler-test.cpp"
 
 int main(int argc, char **argv) {
     printf("Running tests good luck from gtest_main.cpp\n");

@@ -2,10 +2,7 @@
 
 Operator::Operator(char op) {
     value = op;
-}
-
-char Operator::getValue() const {
-    return value;
+    type = TokenType::Operator;
 }
 
 bool Operator::canBeOperator(char op) {

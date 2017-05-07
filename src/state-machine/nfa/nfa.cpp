@@ -20,18 +20,19 @@ NFA::NFA(State &startState, State &finalState, unsigned int automataId) {
 
 NFA::~NFA() {
     while (!states.empty()) {
-        delete states.back();
+        State * state = states.back();
         states.pop_back();
+        delete state;
     }
     states.clear();
 }
 
 void NFA::swap(const NFA &other) {
-    startState = other.startState;
-    finalState = other.finalState;
+    startState = new State(*other.startState);
+    finalState = new State(*other.finalState);
     automataId = other.automataId;
     for (int i = 0; i < other.states.size(); i++) {
-        states.push_back(other.states[i]);
+        states.push_back(new State(*other.states[i]));
     }
 }
 
