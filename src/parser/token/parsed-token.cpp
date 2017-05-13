@@ -15,3 +15,7 @@ bool ParsedToken::isOperator() {
 bool ParsedToken::isLetter() {
     return token->getType() == TokenType::Letter;
 }
+
+char ParsedToken::get() {
+    return token->getValue();
+}

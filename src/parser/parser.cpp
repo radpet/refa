@@ -14,7 +14,20 @@ bool Parser::hasNext() {
 
 char *Parser::getNext() {
     if (hasNext()) {
-        return regex->getExpression() + cursor++;
+        return regex->getExpression() + cursor;
+    }
+
+    return nullptr;
+}
+
+ParsedToken *Parser::lookNext() {
+    if (hasNext()) {
+        char *nextChar = getNext();
+        if (Operator::canBeOperator(*nextChar)) {
+            return new ParsedToken(new Operator(*nextChar));
+        } else {
+            return new ParsedToken(new Letter(*nextChar));
+        }
     }
 
     return nullptr;
@@ -23,6 +36,7 @@ char *Parser::getNext() {
 ParsedToken *Parser::readNext() {
     if (hasNext()) {
         char *nextChar = getNext();
+        cursor += 1;
         if (Operator::canBeOperator(*nextChar)) {
             return new ParsedToken(new Operator(*nextChar));
         } else {

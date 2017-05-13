@@ -19,6 +19,10 @@ public:
 
     // Creates new parsed token wrapper
     // You should take care to free the memory
+    ParsedToken *lookNext();
+
+    // Creates new parsed token wrapper
+    // You should take care to free the memory
     ParsedToken *readNext();
 
     RegularExpression *getRegex() const {

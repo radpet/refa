@@ -7,6 +7,7 @@ class Operator : public Token {
 public:
     static const char STAR = '*';
     static const char UNION = '|';
+    static const char CONCAT = '.';
     static const char LEFT_P = '(';
     static const char RIGHT_P = ')';
 

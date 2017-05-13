@@ -16,6 +16,8 @@ public:
 
     bool isLetter();
 
+    char get();
+
 };
 
 
