@@ -7,9 +7,15 @@ private:
     char *expr;
     int len;
 
+    void swap(const RegularExpression &other);
+
 public:
 
     RegularExpression(char *str);
+
+    RegularExpression(const RegularExpression &other);
+
+    RegularExpression &operator=(RegularExpression &other);
 
     ~RegularExpression();
 

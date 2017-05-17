@@ -48,7 +48,7 @@ NFA &NFA::operator=(const NFA &other) {
 NFA *NFA::concat(NFA &other) {
     int newAutomataId = generateNewAutomataId(automataId, other.getAutomataId());
     for (int i = 0; i < other.getStates().size(); i++) {
-        states.push_back(new State(*other.getStartState()));
+        states.push_back(new State(*other.getStates()[i]));
     }
     Transition transition = Transition(other.getStartState(), Transition::EPSILON);
     finalState->addTransition(transition);

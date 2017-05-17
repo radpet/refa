@@ -26,6 +26,7 @@ State &State::operator=(const State &other) {
     for (Transition *transition:other.transitions) {
         transitions.push_back(new Transition(*transition));
     }
+    return *this;
 }
 
 bool State::operator==(const State &other) {

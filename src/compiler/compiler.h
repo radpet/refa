@@ -8,7 +8,8 @@
 
 class RegularExpressionCompiler {
 private:
-    void preprocessForConcat(RegularExpression &expression);
+    RegularExpression *preprocessForConcat(RegularExpression &expression);
+
     void processOperator(std::stack<Operator> &operators, std::stack<NFA> &constructedNFA);
 
 public:

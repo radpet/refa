@@ -61,31 +61,33 @@ TEST(NFA_TEST, ItShouldSetStartState) {
 }
 
 TEST(NFA_TEST_CONCAT, ItShouldConcatAnotherNFA) {
-    State a = State(1);
-    NFA nfa = NFA(a, a, 1);
+    State aS = State(1, 1);
+    State aF = State(2, 1);
+    NFA nfa = NFA(aS, aF, 1);
 
     ASSERT_EQ(nfa.getAutomataId(), 1);
 
     State *nfaFinalStateBeforeConcat = nfa.getFinalState();
 
-    State mockState = State(2);
-    NFA mockNFA = NFA(mockState, mockState, 2);
+    State mockStateS = State(1, 2);
+    State mockStateF = State(2, 2);
+    NFA mockNFA = NFA(mockStateS, mockStateF, 2);
     nfa.concat(mockNFA);
 
     // automata id should change because we mutate the nfa by using another automata
     ASSERT_EQ(nfa.getAutomataId(), 3);
 
-    ASSERT_EQ(nfa.getStates().size(), 2);
+    ASSERT_EQ(nfa.getStates().size(), 4);
 
     // it should have only 1 eps transition
     // from the final state of the first to the start state of the second
     ASSERT_EQ(nfaFinalStateBeforeConcat->getTransitions()[0]->getLabel(), Transition::EPSILON);
-    ASSERT_TRUE(*nfa.getFinalState() == *mockNFA.getStartState());
 }
 
 TEST(NFA_TEST_KLEENE, ItShouldMakeKleeneStarTransformation) {
-    State a = State(1);
-    NFA nfa = NFA(a, a, 1);
+    State aS = State(1, 1);
+    State aF = State(2, 1);
+    NFA nfa = NFA(aS, aF, 1);
 
     State *finalStateBeforeKleene = nfa.getFinalState();
     nfa.kleene();
@@ -94,7 +96,7 @@ TEST(NFA_TEST_KLEENE, ItShouldMakeKleeneStarTransformation) {
     ASSERT_EQ(nfa.getAutomataId(), 1);
 
     // it should have 3 states since we begin with 1 and kleene star adds 2 more
-    ASSERT_EQ(nfa.getStates().size(), 3);
+    ASSERT_EQ(nfa.getStates().size(), 4);
 
     // it should have 2 eps transitions from start
     ASSERT_EQ(nfa.getStartState()->getTransitions()[0]->getLabel(), Transition::EPSILON);
@@ -107,19 +109,21 @@ TEST(NFA_TEST_KLEENE, ItShouldMakeKleeneStarTransformation) {
 
 
 TEST(NFA_TEST_UNION, ItShouldUnionTwoNFA) {
-    State a = State(1);
-    NFA nfa = NFA(a, a, 1);
+    State aS = State(1, 1);
+    State aF = State(2, 1);
+    NFA nfa = NFA(aS, aF, 1);
 
-    State b = State(2);
-    NFA nfa2 = NFA(b, b, 2);
+    State bS = State(1, 2);
+    State bF = State(2, 2);
+    NFA nfa2 = NFA(bS, bF, 2);
 
     nfa._union(nfa2);
 
     // automata id should change since we mutate by union
     ASSERT_EQ(nfa.getAutomataId(), 3);
 
-    // it should have 4 states since we begin with 1 and union adds 2 more and nfa2 has 1
-    ASSERT_EQ(nfa.getStates().size(), 4);
+    // it should have 6 states since we begin with 2 and union adds 2 more and nfa2 has 2
+    ASSERT_EQ(nfa.getStates().size(), 6);
 
     // we should have 2 eps transitions from new start state
     ASSERT_EQ(nfa.getStartState()->getTransitions()[0]->getLabel(), Transition::EPSILON);
