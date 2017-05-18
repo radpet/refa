@@ -24,118 +24,61 @@ NFA RegularExpressionCompiler::compile(RegularExpression expression) {
             NFA nfa = NFA(start, end, nfaCounter);
             nfaCounter++;
             constructedNFA.push(nfa);
-        } else if (parsedToken->isOperator()) {
+        }
+
+        if (parsedToken->isOperator()) {
             if (operators.empty() || parsedToken->get() == Operator::LEFT_P) {
+                Operator op = Operator(parsedToken->get());
+                operators.push(op);
+            } else if (parsedToken->get() == Operator::RIGHT_P) {
+                // we matched end of (), we should eval all operators between ( and )
+
+                while (!operators.empty() && operators.top().getValue() != Operator::LEFT_P) {
+                    Operator op = operators.top();
+                    NFA nfa = constructedNFA.top();
+
+                    constructedNFA.pop();
+                    operators.pop();
+
+                    switch (op.getValue()) {
+                        case Operator::STAR: {
+                            nfa.kleene();
+                            constructedNFA.push(nfa);
+                            break;
+                        }
+                        case Operator::UNION: {
+                            NFA other = constructedNFA.top();
+                            constructedNFA.pop();
+                            nfa._union(other);
+                            constructedNFA.push(nfa);
+                            break;
+                        }
+                        case Operator::CONCAT: {
+                            NFA previous = constructedNFA.top();
+                            constructedNFA.pop();
+                            previous.concat(nfa);
+                            constructedNFA.push(previous);
+                            break;
+                        }
+                    }
+                }
+
+                operators.pop();
+
+            } else {
+                // eval if we can and push new op
+
+                //missing eval code here
+
                 Operator op = Operator(parsedToken->get());
                 operators.push(op);
             }
         }
 
-        //else if (parsedToken->get() == Operator::RIGHT_P) {
-//                // we matched () we should eval all operators between ( and )
-//
-//                while (!operators.empty() && operators.top().getValue() != Operator::LEFT_P) {
-//                    Operator op = operators.top();
-//                    NFA nfa = constructedNFA.top();
-//
-//                    constructedNFA.pop();
-//                    operators.pop();
-//
-//                    switch (op.getValue()) {
-//                        case Operator::STAR: {
-//                            nfa.kleene();
-//                            constructedNFA.push(nfa);
-//                            break;
-//                        }
-//                        case Operator::UNION: {
-//                            NFA other = constructedNFA.top();
-//                            constructedNFA.pop();
-//                            nfa._union(other);
-//                            constructedNFA.push(nfa);
-//                            break;
-//                        }
-//                        case Operator::CONCAT: {
-//                            NFA previous = constructedNFA.top();
-//                            constructedNFA.pop();
-//                            previous.concat(nfa);
-//                            constructedNFA.push(previous);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                operators.pop();
-//            } else {
-//                // eval everything
-//                // and put it in the stack
-//
-//                while (!operators.empty()) {
-//                    Operator op = operators.top();
-//                    NFA nfa = constructedNFA.top();
-//
-//                    constructedNFA.pop();
-//                    operators.pop();
-//
-//                    switch (op.getValue()) {
-//                        case Operator::STAR: {
-//                            nfa.kleene();
-//                            constructedNFA.push(nfa);
-//                            break;
-//                        }
-//                        case Operator::UNION: {
-//                            NFA other = constructedNFA.top();
-//                            constructedNFA.pop();
-//                            nfa._union(other);
-//                            constructedNFA.push(nfa);
-//                            break;
-//                        }
-//                        case Operator::CONCAT: {
-//                            NFA previous = constructedNFA.top();
-//                            constructedNFA.pop();
-//                            previous.concat(nfa);
-//                            constructedNFA.push(previous);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                Operator op = Operator(parsedToken->get());
-//                operators.push(op);
-//            }
-//        } else {
-//            // if it is not operator or input letter what is it?
-//        }
         delete parsedToken;
     }
-    while (!operators.empty()) {
-        Operator op = operators.top();
-        NFA nfa = constructedNFA.top();
 
-        constructedNFA.pop();
-        operators.pop();
-
-        switch (op.getValue()) {
-            case Operator::STAR: {
-                nfa.kleene();
-                constructedNFA.push(nfa);
-                break;
-            }
-            case Operator::UNION: {
-                NFA other = constructedNFA.top();
-                constructedNFA.pop();
-                nfa._union(other);
-                constructedNFA.push(nfa);
-                break;
-            }
-            case Operator::CONCAT: {
-                NFA previous = constructedNFA.top();
-                constructedNFA.pop();
-                previous.concat(nfa);
-                constructedNFA.push(previous);
-                break;
-            }
-        }
-    }
+    processOperator(operators, constructedNFA);
 
     delete expr;
     return constructedNFA.top();
@@ -191,5 +134,33 @@ RegularExpression *RegularExpressionCompiler::preprocessForConcat(RegularExpress
 }
 
 void RegularExpressionCompiler::processOperator(std::stack<Operator> &operators, std::stack<NFA> &constructedNFA) {
+    while (!operators.empty()) {
+        Operator op = operators.top();
+        NFA nfa = constructedNFA.top();
 
+        constructedNFA.pop();
+        operators.pop();
+
+        switch (op.getValue()) {
+            case Operator::STAR: {
+                nfa.kleene();
+                constructedNFA.push(nfa);
+                break;
+            }
+            case Operator::UNION: {
+                NFA other = constructedNFA.top();
+                constructedNFA.pop();
+                nfa._union(other);
+                constructedNFA.push(nfa);
+                break;
+            }
+            case Operator::CONCAT: {
+                NFA previous = constructedNFA.top();
+                constructedNFA.pop();
+                previous.concat(nfa);
+                constructedNFA.push(previous);
+                break;
+            }
+        }
+    }
 }
