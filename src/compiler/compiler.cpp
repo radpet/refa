@@ -28,11 +28,12 @@ NFA RegularExpressionCompiler::compile(RegularExpression expression) {
 
         if (parsedToken->isOperator()) {
             if (operators.empty() || parsedToken->get() == Operator::LEFT_P) {
-                Operator op = Operator(parsedToken->get());
+                Operator op = Operator(parsedToken->get(), Operator::findPriority(parsedToken->get()));
                 operators.push(op);
             } else if (parsedToken->get() == Operator::RIGHT_P) {
                 // we matched end of (), we should eval all operators between ( and )
 
+                //make this lambda
                 while (!operators.empty() && operators.top().getValue() != Operator::LEFT_P) {
                     Operator op = operators.top();
                     NFA nfa = constructedNFA.top();
@@ -70,8 +71,40 @@ NFA RegularExpressionCompiler::compile(RegularExpression expression) {
 
                 //missing eval code here
 
-                Operator op = Operator(parsedToken->get());
-                operators.push(op);
+                Operator currentOperator = Operator(parsedToken->get(), Operator::findPriority(parsedToken->get()));
+
+                while (!operators.empty() && currentOperator.getPriority() <= operators.top().getPriority()) {
+                    Operator op = operators.top();
+                    NFA nfa = constructedNFA.top();
+
+                    constructedNFA.pop();
+                    operators.pop();
+
+                    switch (op.getValue()) {
+                        case Operator::STAR: {
+                            nfa.kleene();
+                            constructedNFA.push(nfa);
+                            break;
+                        }
+                        case Operator::UNION: {
+                            NFA other = constructedNFA.top();
+                            constructedNFA.pop();
+                            nfa._union(other);
+                            constructedNFA.push(nfa);
+                            break;
+                        }
+                        case Operator::CONCAT: {
+                            NFA previous = constructedNFA.top();
+                            constructedNFA.pop();
+                            previous.concat(nfa);
+                            constructedNFA.push(previous);
+                            break;
+                        }
+                    }
+                }
+
+
+                operators.push(currentOperator);
             }
         }
 

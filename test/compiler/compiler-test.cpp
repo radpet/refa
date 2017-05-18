@@ -64,3 +64,52 @@ TEST(RegularExpressionCompiler, ItShouldEvalEverythingBetweenLeftPRightP3) {
 
     ASSERT_EQ(result.getStates().size(), 6);
 }
+
+TEST(RegularExpressionCompiler, ItShouldEvalComplexRegex) {
+    char regEx[] = "a(a|b)b";
+    RegularExpressionCompiler regularExpressionCompiler = RegularExpressionCompiler();
+    NFA result = regularExpressionCompiler.compile(regEx);
+
+    ASSERT_EQ(result.getStates().size(), 10);
+}
+
+//TEST(RegularExpressionCompiler, ItShouldEvalComplexRegex2) {
+//    char regEx[] = "abc(a|b)(b|c)";
+//    RegularExpressionCompiler regularExpressionCompiler = RegularExpressionCompiler();
+//    NFA result = regularExpressionCompiler.compile(regEx);
+//
+//    // abc - > 6, a|b -> 6 b|c 6
+//    ASSERT_EQ(result.getStates().size(), 18);
+//}
+//
+//TEST(RegularExpressionCompiler, ItShouldEvalComplexRegex3) {
+//    char regEx[] = "a(a|b)*b";
+//    RegularExpressionCompiler regularExpressionCompiler = RegularExpressionCompiler();
+//    NFA result = regularExpressionCompiler.compile(regEx);
+//
+//    ASSERT_EQ(result.getStates().size(), 10);
+//}
+//
+//TEST(RegularExpressionCompiler, ItShouldEvalComplexRegex4) {
+//    char regEx[] = "a|b|c(ab)*";
+//    RegularExpressionCompiler regularExpressionCompiler = RegularExpressionCompiler();
+//    NFA result = regularExpressionCompiler.compile(regEx);
+//
+//    ASSERT_EQ(result.getStates().size(), 14);
+//}
+
+TEST(RegularExpressionCompiler, ItShouldEvalComplexRegex4) {
+    char regEx[] = "abc";
+    RegularExpressionCompiler regularExpressionCompiler = RegularExpressionCompiler();
+    NFA result = regularExpressionCompiler.compile(regEx);
+
+    ASSERT_EQ(result.getStates().size(), 6);
+}
+
+TEST(RegularExpressionCompiler, ItShouldEvalComplexRegex5) {
+    char regEx[] = "a(a|b)";
+    RegularExpressionCompiler regularExpressionCompiler = RegularExpressionCompiler();
+    NFA result = regularExpressionCompiler.compile(regEx);
+
+    ASSERT_EQ(result.getStates().size(), 8);
+}
