@@ -6,7 +6,12 @@ State::State(unsigned int id, unsigned int automataId) {
 }
 
 State::State(unsigned int id, unsigned int automataId, std::vector<Transition *> &transitions) {
-    *this = State(id, automataId, transitions);
+    this->id = id;
+    this->automataId = automataId;
+
+    for (Transition *transition:transitions) {
+        this->transitions.push_back(new Transition(*transition));
+    }
 }
 
 State::State(const State &other) {
