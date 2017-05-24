@@ -1,12 +1,16 @@
 #include "compiler.h"
 #include "parser/parser.h"
-#include "parser/token/operator/operator.h"
 
 RegularExpressionCompiler::RegularExpressionCompiler() {
 
 }
 
-NFA RegularExpressionCompiler::compile(RegularExpression expression) {
+NFA RegularExpressionCompiler::compile(const char *expression) {
+    RegularExpression expr = RegularExpression(expression);
+    return compile(expr);
+}
+
+NFA RegularExpressionCompiler::compile(RegularExpression& expression) {
     RegularExpression *expr = preprocessForConcat(expression);
 
     Parser parser = Parser(*expr);

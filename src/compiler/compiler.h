@@ -15,7 +15,8 @@ private:
 public:
     RegularExpressionCompiler();
 
-    NFA compile(RegularExpression expression);
+    NFA compile(RegularExpression& expression);
+    NFA compile(const char* expression);
 
 };
 

@@ -11,7 +11,7 @@ private:
 
 public:
 
-    RegularExpression(char *str);
+    RegularExpression(const char *str);
 
     RegularExpression(const RegularExpression &other);
 

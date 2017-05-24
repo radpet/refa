@@ -1,7 +1,7 @@
 #include<cstring>
 #include "./regular-expression.h"
 
-RegularExpression::RegularExpression(char *str) {
+RegularExpression::RegularExpression(const char *str) {
     len = std::strlen(str);
     expr = new char[len];
     std::strcpy(expr, str);
