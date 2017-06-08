@@ -10,7 +10,7 @@ NFA RegularExpressionCompiler::compile(const char *expression) {
     return compile(expr);
 }
 
-NFA RegularExpressionCompiler::compile(RegularExpression& expression) {
+NFA RegularExpressionCompiler::compile(RegularExpression &expression) {
     RegularExpression *expr = preprocessForConcat(expression);
 
     Parser parser = Parser(*expr);
@@ -153,10 +153,12 @@ RegularExpression *RegularExpressionCompiler::preprocessForConcat(RegularExpress
                     processedExpression[++index] = Operator::CONCAT;
                 }
 
-                if (currentToken->get() == Operator::RIGHT_P && nextToken->get() == Operator::LEFT_P) {
-                    // )(
+                if (currentToken->get() == Operator::RIGHT_P &&
+                    (nextToken->get() == Operator::LEFT_P || nextToken->isLetter())) {
+                    // )( or )a
                     processedExpression[++index] = Operator::CONCAT;
                 }
+
             }
         }
         index += 1;
