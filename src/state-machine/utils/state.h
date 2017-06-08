@@ -45,7 +45,7 @@ public:
         return automataId;
     };
 
-    std::vector<Transition *> getTransitions();
+    const std::vector<Transition *> getTransitions() const;
 
 };
 

@@ -21,7 +21,7 @@ Transition::Transition(State *to, char label) {
     this->label = label;
 }
 
-State *Transition::getTo() const {
+const State *Transition::getTo() const {
     return to;
 }
 

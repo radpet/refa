@@ -57,6 +57,6 @@ void State::addTransition(State *to, char label) {
     return addTransition(transition);
 }
 
-std::vector<Transition *> State::getTransitions() {
+const std::vector<Transition *> State::getTransitions() const {
     return transitions;
 }

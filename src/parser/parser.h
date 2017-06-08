@@ -10,7 +10,7 @@ private:
     RegularExpression *regex;
     int cursor;
 
-    char *getNext();
+    const char * getNext();
 
 public:
     Parser(RegularExpression &regex);

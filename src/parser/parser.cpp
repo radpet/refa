@@ -12,7 +12,7 @@ bool Parser::hasNext() {
     return cursor < regex->length();
 }
 
-char *Parser::getNext() {
+const char *Parser::getNext() {
     if (hasNext()) {
         return regex->getExpression() + cursor;
     }
@@ -22,7 +22,7 @@ char *Parser::getNext() {
 
 ParsedToken *Parser::lookNext() {
     if (hasNext()) {
-        char *nextChar = getNext();
+        const char *nextChar = getNext();
         if (Operator::canBeOperator(*nextChar)) {
             return new ParsedToken(new Operator(*nextChar));
         } else {
@@ -35,7 +35,7 @@ ParsedToken *Parser::lookNext() {
 
 ParsedToken *Parser::readNext() {
     if (hasNext()) {
-        char *nextChar = getNext();
+        const char *nextChar = getNext();
         cursor += 1;
         if (Operator::canBeOperator(*nextChar)) {
             return new ParsedToken(new Operator(*nextChar));

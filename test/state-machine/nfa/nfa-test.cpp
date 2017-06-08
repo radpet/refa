@@ -47,7 +47,7 @@ TEST(NFA_TEST, ItShouldSetFinalState) {
 
     ASSERT_TRUE(nfa.hasState(finalState));
     ASSERT_TRUE(nfa.getFinalState() != &finalState);
-    ASSERT_TRUE(*nfa.getFinalState() == finalState);
+    ASSERT_TRUE(finalState == *nfa.getFinalState());
 }
 
 TEST(NFA_TEST, ItShouldSetStartState) {
@@ -57,7 +57,7 @@ TEST(NFA_TEST, ItShouldSetStartState) {
 
     ASSERT_TRUE(nfa.hasState(startState));
     ASSERT_TRUE(nfa.getStartState() != &startState);
-    ASSERT_TRUE(*nfa.getStartState() == startState);
+    ASSERT_TRUE(startState == *nfa.getStartState());
 }
 
 TEST(NFA_TEST_CONCAT, ItShouldConcatAnotherNFA) {
@@ -67,7 +67,7 @@ TEST(NFA_TEST_CONCAT, ItShouldConcatAnotherNFA) {
 
     ASSERT_EQ(nfa.getAutomataId(), 1);
 
-    State *nfaFinalStateBeforeConcat = nfa.getFinalState();
+    const State *nfaFinalStateBeforeConcat = nfa.getFinalState();
 
     State mockStateS = State(1, 2);
     State mockStateF = State(2, 2);
@@ -89,7 +89,7 @@ TEST(NFA_TEST_KLEENE, ItShouldMakeKleeneStarTransformation) {
     State aF = State(2, 1);
     NFA nfa = NFA(aS, aF, 1);
 
-    State *finalStateBeforeKleene = nfa.getFinalState();
+    const State *finalStateBeforeKleene = nfa.getFinalState();
     nfa.kleene();
 
     // automata id should not change since we do not mutate with another automata

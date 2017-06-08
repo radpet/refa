@@ -26,12 +26,12 @@ TEST(StateTest, ItShouldAddTransitionAsObj) {
 }
 
 TEST(StateTest, ItShouldAddTransitionAsStateAndLabel) {
-    State state = State(1,1);
-    State mockState = State(2,1);
+    State state = State(1, 1);
+    State mockState = State(2, 1);
     state.addTransition(mockState, 'a');
 
     ASSERT_EQ(state.getTransitions().size(), 1);
-    ASSERT_TRUE(*(state.getTransitions()[0]->getTo()) == mockState);
+    ASSERT_TRUE(mockState == *(state.getTransitions()[0]->getTo()));
 }
 
 TEST(StateTest, ItShouldDeepCopyState) {

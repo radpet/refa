@@ -53,9 +53,9 @@ public:
         return automataId;
     }
 
-    State *getStartState();
+    const State *getStartState();
 
-    State *getFinalState();
+    const State *getFinalState();
 
 
 };

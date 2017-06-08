@@ -27,7 +27,7 @@ public:
     // Deep copy the state the pointer points
     Transition(State *to, char label);
 
-    State *getTo() const;
+    const State *getTo() const;
 
     char getLabel() const;
 

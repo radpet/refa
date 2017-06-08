@@ -19,7 +19,7 @@ public:
 
     ~RegularExpression();
 
-    char *getExpression() const {
+    char const *getExpression() const {
         return expr;
     }
 

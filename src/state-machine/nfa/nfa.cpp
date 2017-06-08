@@ -50,9 +50,9 @@ NFA *NFA::concat(NFA &other) {
     for (int i = 0; i < other.getStates().size(); i++) {
         states.push_back(new State(*other.getStates()[i]));
     }
-    Transition transition = Transition(other.getStartState(), Transition::EPSILON);
+    Transition transition = Transition(other.startState, Transition::EPSILON);
     finalState->addTransition(transition);
-    setFinalState(*other.getFinalState());
+    setFinalState(*other.finalState);
 
     automataId = newAutomataId;
 
@@ -87,10 +87,10 @@ NFA *NFA::_union(NFA &other) {
     State newFinal = State(2, newAutomataId);
 
     newStart.addTransition(startState, Transition::EPSILON);
-    newStart.addTransition(findState(*other.getStartState()), Transition::EPSILON);
+    newStart.addTransition(findState(*other.startState), Transition::EPSILON);
 
     finalState->addTransition(newFinal, Transition::EPSILON);
-    findState(*other.getFinalState())->addTransition(newFinal, Transition::EPSILON);
+    findState(*other.finalState)->addTransition(newFinal, Transition::EPSILON);
 
     setStartState(newStart);
     setFinalState(newFinal);
@@ -140,10 +140,10 @@ void NFA::setFinalState(State &finalState) {
     updateStartOrFinalState(&this->finalState, finalState);
 }
 
-State *NFA::getStartState() {
+const State *NFA::getStartState() {
     return startState;
 }
 
-State *NFA::getFinalState() {
+const State *NFA::getFinalState() {
     return finalState;
 }
