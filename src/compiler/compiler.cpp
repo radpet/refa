@@ -71,9 +71,6 @@ NFA RegularExpressionCompiler::compile(RegularExpression &expression) {
                 operators.pop();
 
             } else {
-                // eval if we can and push new op
-
-                //missing eval code here
 
                 Operator currentOperator = Operator(parsedToken->get(), Operator::findPriority(parsedToken->get()));
 
@@ -107,7 +104,6 @@ NFA RegularExpressionCompiler::compile(RegularExpression &expression) {
                     }
                 }
 
-
                 operators.push(currentOperator);
             }
         }
@@ -120,6 +116,38 @@ NFA RegularExpressionCompiler::compile(RegularExpression &expression) {
     delete expr;
     return constructedNFA.top();
 
+}
+
+void RegularExpressionCompiler::processOperator(std::stack<Operator> &operators, std::stack<NFA> &constructedNFA) {
+    while (!operators.empty()) {
+        Operator op = operators.top();
+        NFA nfa = constructedNFA.top();
+
+        constructedNFA.pop();
+        operators.pop();
+
+        switch (op.getValue()) {
+            case Operator::STAR: {
+                nfa.kleene();
+                constructedNFA.push(nfa);
+                break;
+            }
+            case Operator::UNION: {
+                NFA other = constructedNFA.top();
+                constructedNFA.pop();
+                nfa._union(other);
+                constructedNFA.push(nfa);
+                break;
+            }
+            case Operator::CONCAT: {
+                NFA previous = constructedNFA.top();
+                constructedNFA.pop();
+                previous.concat(nfa);
+                constructedNFA.push(previous);
+                break;
+            }
+        }
+    }
 }
 
 RegularExpression *RegularExpressionCompiler::preprocessForConcat(RegularExpression &expression) {
@@ -170,36 +198,4 @@ RegularExpression *RegularExpressionCompiler::preprocessForConcat(RegularExpress
     delete[] processedExpression;
     return processedRegEx;
 
-}
-
-void RegularExpressionCompiler::processOperator(std::stack<Operator> &operators, std::stack<NFA> &constructedNFA) {
-    while (!operators.empty()) {
-        Operator op = operators.top();
-        NFA nfa = constructedNFA.top();
-
-        constructedNFA.pop();
-        operators.pop();
-
-        switch (op.getValue()) {
-            case Operator::STAR: {
-                nfa.kleene();
-                constructedNFA.push(nfa);
-                break;
-            }
-            case Operator::UNION: {
-                NFA other = constructedNFA.top();
-                constructedNFA.pop();
-                nfa._union(other);
-                constructedNFA.push(nfa);
-                break;
-            }
-            case Operator::CONCAT: {
-                NFA previous = constructedNFA.top();
-                constructedNFA.pop();
-                previous.concat(nfa);
-                constructedNFA.push(previous);
-                break;
-            }
-        }
-    }
 }

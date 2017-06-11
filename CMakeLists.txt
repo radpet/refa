@@ -40,6 +40,8 @@ set(SOURCES
         src/parser/token/parsed-token.h
         src/parser/parser.h
 
+        src/writer/serializable.h
+
         src/state-machine/utils/transition.cpp
         src/state-machine/utils/state.cpp
         src/state-machine/nfa/nfa.cpp
@@ -49,6 +51,7 @@ set(SOURCES
         src/parser/token/letter/letter.cpp
         src/parser/token/parsed-token.cpp
         src/parser/parser.cpp
+
         )
 
 set(TEST_RUNNER

@@ -51,8 +51,11 @@ NFA *NFA::concat(NFA &other) {
         states.push_back(new State(*other.getStates()[i]));
     }
     Transition transition = Transition(other.startState, Transition::EPSILON);
+
     finalState->addTransition(transition);
-    setFinalState(*other.finalState);
+
+    finalState = findState(*other.finalState);
+    //setFinalState(*other.finalState);
 
     automataId = newAutomataId;
 
@@ -133,11 +136,11 @@ void NFA::updateStartOrFinalState(State **startOrFinal, State &state) {
 }
 
 void NFA::setStartState(State &startState) {
-    updateStartOrFinalState(&this->startState, startState);
+    updateStartOrFinalState(&(this->startState), startState);
 }
 
 void NFA::setFinalState(State &finalState) {
-    updateStartOrFinalState(&this->finalState, finalState);
+    updateStartOrFinalState(&(this->finalState), finalState);
 }
 
 const State *NFA::getStartState() {
@@ -146,4 +149,25 @@ const State *NFA::getStartState() {
 
 const State *NFA::getFinalState() {
     return finalState;
+}
+
+void NFA::serialize(std::ostream &out) const {
+
+    // call serialize on each state
+
+    out << "{\n";
+    out << "\"nfa\":[";
+    for (int i = 0; i < states.size(); i++) {
+        states[i]->serialize(out);
+        if (i != states.size() - 1) {
+            out << ",\n";
+        }
+    }
+    out << "],\n";
+    out << "\"startState\":";
+    startState->serialize(out);
+    out << ",\n";
+    out << "\"finalState\":";
+    finalState->serialize(out);
+    out << "}\n";
 }

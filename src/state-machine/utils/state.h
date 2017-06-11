@@ -2,17 +2,21 @@
 #define STATE_H
 
 #include<vector>
+#include "writer/serializable.h"
 #include "transition.h"
 
 class Transition;
 
-class State {
+class State : public Serializable {
 private:
     // fist index internal for automata
     unsigned int id;
     // second index to distinguish states
     unsigned int automataId;
     std::vector<Transition *> transitions;
+
+    char *intToString(int num) const;
+
 public:
 
     State(unsigned int id = 0, unsigned int automataId = 0);
@@ -46,6 +50,8 @@ public:
     };
 
     const std::vector<Transition *> getTransitions() const;
+
+    virtual void serialize(std::ostream &out) const;
 
 };
 

@@ -5,11 +5,11 @@
 #ifndef REFA_SERIALIZABLE_H
 #define REFA_SERIALIZABLE_H
 
+#include <iostream>
 
 class Serializable {
-    virtual bool serialize() = 0;
-
-    virtual ~Serializable();
+public:
+    virtual void serialize(std::ostream &out) const = 0;
 };
 
 

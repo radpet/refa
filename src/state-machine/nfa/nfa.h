@@ -2,8 +2,9 @@
 #define NFA_H
 
 #include "../utils/state.h"
+#include "writer/serializable.h"
 
-class NFA {
+class NFA : public Serializable {
 private:
     unsigned int automataId;
     std::vector<State *> states;
@@ -56,6 +57,8 @@ public:
     const State *getStartState();
 
     const State *getFinalState();
+
+    virtual void serialize(std::ostream &out) const;
 
 
 };
