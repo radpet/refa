@@ -48,13 +48,17 @@ TEST(StateTest, ItShouldSerializeState) {
     State mockState = State(2, 1);
     state.addTransition(mockState, 'a');
 
+    //ugly test
     std::string result = std::string("{\n") +
                          "\"id1\":\"1\",\n" +
                          "\"id2\":\"1\",\n" +
                          "\"transitions\":[{\n" +
+                         "\"to\":{\n" +
                          "\"id1\":\"2\",\n" +
                          "\"id2\":\"1\",\n" +
                          "\"transitions\":[]\n" +
+                         "},\n" +
+                         "\"label\":\"a\"\n" +
                          "}]\n" +
                          "}\0";
 

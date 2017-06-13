@@ -7,6 +7,10 @@ Transition::~Transition() {
 }
 
 Transition::Transition(const Transition &other) {
+    *this = other;
+}
+
+Transition &Transition::operator=(const Transition &other) {
     this->to = new State(*other.to);
     this->label = other.getLabel();
 }

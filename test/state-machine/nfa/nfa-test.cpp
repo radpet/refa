@@ -78,10 +78,13 @@ TEST(NFA_TEST_CONCAT, ItShouldConcatAnotherNFA) {
     ASSERT_EQ(nfa.getAutomataId(), 3);
 
     ASSERT_EQ(nfa.getStates().size(), 4);
+    const State* test = nfa.findState(*new State(*nfaFinalStateBeforeConcat));
+   // ASSERT_EQ(nfaFinalStateBeforeConcat,test);
 
+    std::cout<<nfaFinalStateBeforeConcat<<" "<<test<<std::endl;
     // it should have only 1 eps transition
     // from the final state of the first to the start state of the second
-    ASSERT_EQ(nfaFinalStateBeforeConcat->getTransitions()[0]->getLabel(), Transition::EPSILON);
+    ASSERT_EQ(test->getTransitions()[0]->getLabel(), Transition::EPSILON);
 }
 
 TEST(NFA_TEST_KLEENE, ItShouldMakeKleeneStarTransformation) {
