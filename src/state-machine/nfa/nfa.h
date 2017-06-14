@@ -38,6 +38,8 @@ public:
 
     State *findState(State &state);
 
+    State *findState(State *state);
+
     void setStartState(State &startState);
 
     void setFinalState(State &finalState);

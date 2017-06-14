@@ -78,7 +78,7 @@ TEST(NFA_TEST_CONCAT, ItShouldConcatAnotherNFA) {
     ASSERT_EQ(nfa.getAutomataId(), 3);
 
     ASSERT_EQ(nfa.getStates().size(), 4);
-    const State* test = nfa.findState(*new State(*nfaFinalStateBeforeConcat));
+    const State* test = nfa.findState(nfaFinalStateBeforeConcat->clone());
    // ASSERT_EQ(nfaFinalStateBeforeConcat,test);
 
     std::cout<<nfaFinalStateBeforeConcat<<" "<<test<<std::endl;

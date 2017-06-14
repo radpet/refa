@@ -4,10 +4,11 @@
 #include<vector>
 #include "writer/serializable.h"
 #include "transition.h"
+#include "utils/cloneable.h"
 
 class Transition;
 
-class State : public Serializable {
+class State : public Serializable, public Cloneable<State> {
 private:
     // fist index internal for automata
     unsigned int id;
@@ -52,6 +53,8 @@ public:
     const std::vector<Transition *> getTransitions() const;
 
     virtual void serialize(std::ostream &out) const;
+
+    virtual State *clone() const;
 
 };
 

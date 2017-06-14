@@ -11,7 +11,7 @@ State::State(unsigned int id, unsigned int automataId, std::vector<Transition *>
     this->automataId = automataId;
 
     for (Transition *transition:transitions) {
-        this->transitions.push_back(new Transition(*transition));
+        this->transitions.push_back(transition->clone());
     }
 }
 
@@ -37,7 +37,7 @@ State &State::operator=(const State &other) {
         transitions.clear();
 
         for (Transition *transition:other.transitions) {
-            transitions.push_back(new Transition(*transition));
+            transitions.push_back(transition->clone());
         }
     }
     return *this;
@@ -48,12 +48,12 @@ bool State::operator==(const State &other) {
 }
 
 void State::addTransition(Transition &other) {
-    Transition *transition = new Transition(other);
+    Transition *transition = other.clone();
     addTransition(transition);
 }
 
 void State::addTransition(Transition *transition) {
-    transitions.push_back(new Transition(*transition));
+    transitions.push_back(transition->clone());
 }
 
 void State::addTransition(State &to, char label) {
@@ -96,6 +96,10 @@ void State::serialize(std::ostream &out) const {
 
     delete id1;
     delete id2;
+}
+
+State *State::clone() const {
+    return new State(*this);
 }
 
 char *State::intToString(int num) const {

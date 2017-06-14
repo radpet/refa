@@ -42,6 +42,8 @@ set(SOURCES
 
         src/writer/serializable.h
 
+        src/utils/cloneable.h
+
         src/state-machine/utils/transition.cpp
         src/state-machine/utils/state.cpp
         src/state-machine/nfa/nfa.cpp

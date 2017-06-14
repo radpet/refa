@@ -2,11 +2,12 @@
 #define TRANSITION_H
 
 #include "state.h"
+#include "utils/cloneable.h"
 
 // @TODO why should I use forward declaration here?
 class State;
 
-class Transition {
+class Transition : public Cloneable<Transition> {
 private:
     State *to;
     char label;
@@ -32,6 +33,8 @@ public:
     const State *getTo() const;
 
     char getLabel() const;
+
+    virtual Transition *clone() const;
 
 };
 

@@ -11,17 +11,17 @@ Transition::Transition(const Transition &other) {
 }
 
 Transition &Transition::operator=(const Transition &other) {
-    this->to = new State(*other.to);
+    this->to = other.to->clone();
     this->label = other.getLabel();
 }
 
 Transition::Transition(State &to, char label) {
-    this->to = new State(to);
+    this->to = to.clone();
     this->label = label;
 }
 
 Transition::Transition(State *to, char label) {
-    this->to = new State(*to);
+    this->to = to->clone();
     this->label = label;
 }
 
@@ -31,4 +31,8 @@ const State *Transition::getTo() const {
 
 char Transition::getLabel() const {
     return label;
+}
+
+Transition *Transition::clone() const {
+    return new Transition(*this);
 }

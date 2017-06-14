@@ -39,7 +39,7 @@ void NFA::swap(const NFA &other) {
 
         automataId = other.automataId;
         for (int i = 0; i < other.states.size(); i++) {
-            states.push_back(new State(*other.states[i]));
+            states.push_back(other.states[i]->clone());
         }
 
         startState = findState(*other.startState);
@@ -57,7 +57,7 @@ NFA &NFA::operator=(const NFA &other) {
 NFA *NFA::concat(NFA &other) {
     int newAutomataId = generateNewAutomataId(automataId, other.getAutomataId());
     for (int i = 0; i < other.getStates().size(); i++) {
-        states.push_back(new State(*other.getStates()[i]));
+        states.push_back(other.getStates()[i]->clone());
     }
 
     finalState->addTransition(other.startState, Transition::EPSILON);
@@ -89,7 +89,7 @@ NFA *NFA::kleene() {
 NFA *NFA::_union(NFA &other) {
 
     for (int i = 0; i < other.getStates().size(); i++) {
-        states.push_back(new State(*other.getStates()[i]));
+        states.push_back(other.getStates()[i]->clone());
     }
 
     int newAutomataId = generateNewAutomataId(automataId, other.getAutomataId());
@@ -130,6 +130,10 @@ State *NFA::findState(State &state) {
     return nullptr;
 }
 
+State *NFA::findState(State *state) {
+    return findState(*state);
+}
+
 // First check if we have the state in the current states by looking at its id
 // If it is not found deep copy the state and add it to the states;
 void NFA::updateStartOrFinalState(State **startOrFinal, State &state) {
@@ -137,7 +141,7 @@ void NFA::updateStartOrFinalState(State **startOrFinal, State &state) {
     if (hasState(state)) {
         *startOrFinal = findState(state);
     } else {
-        *startOrFinal = new State(state);
+        *startOrFinal = state.clone();
         states.push_back(*startOrFinal);
     }
 }
