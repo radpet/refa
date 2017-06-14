@@ -29,8 +29,7 @@ NFA::~NFA() {
 
 void NFA::swap(const NFA &other) {
     if (this != &other) {
-        delete startState;
-        delete finalState;
+
         while (!states.empty()) {
             State *state = states.back();
             states.pop_back();
@@ -38,12 +37,13 @@ void NFA::swap(const NFA &other) {
         }
         states.clear();
 
-        startState = new State(*other.startState);
-        finalState = new State(*other.finalState);
         automataId = other.automataId;
         for (int i = 0; i < other.states.size(); i++) {
             states.push_back(new State(*other.states[i]));
         }
+
+        startState = findState(*other.startState);
+        finalState = findState(*other.finalState);
     }
 }
 
@@ -59,13 +59,8 @@ NFA *NFA::concat(NFA &other) {
     for (int i = 0; i < other.getStates().size(); i++) {
         states.push_back(new State(*other.getStates()[i]));
     }
-    //Transition transition = Transition(other.startState, Transition::EPSILON);
 
-    //finalState->addTransition(other.startState, Transition::EPSILON);
-
-    findState(*finalState)->addTransition(other.startState,Transition::EPSILON);
-
-    //finalState = findState(*other.finalState);
+    finalState->addTransition(other.startState, Transition::EPSILON);
 
     setFinalState(*other.finalState);
 
@@ -82,8 +77,8 @@ NFA *NFA::kleene() {
     newStart.addTransition(newFinal, Transition::EPSILON);
     newStart.addTransition(startState, Transition::EPSILON);
 
-    findState(*finalState)->addTransition(newFinal, Transition::EPSILON);
-    findState(*finalState)->addTransition(startState, Transition::EPSILON);
+    finalState->addTransition(newFinal, Transition::EPSILON);
+    finalState->addTransition(startState, Transition::EPSILON);
 
     setStartState(newStart);
     setFinalState(newFinal);
@@ -104,8 +99,8 @@ NFA *NFA::_union(NFA &other) {
     newStart.addTransition(startState, Transition::EPSILON);
     newStart.addTransition(findState(*other.startState), Transition::EPSILON);
 
-    findState(*finalState)->addTransition(newFinal, Transition::EPSILON);
-    findState(*other.finalState)->addTransition(newFinal, Transition::EPSILON);
+    finalState->addTransition(newFinal, Transition::EPSILON);
+    other.finalState->addTransition(newFinal, Transition::EPSILON);
 
     setStartState(newStart);
     setFinalState(newFinal);
