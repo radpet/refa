@@ -4,17 +4,22 @@ Refa (*Regular expression to finitite state machine*) is open source C++ library
 
 # How it works?
 There are three main modules parser/compiler/nfa.
+
 The parser module transforms the input regex to a form that the compiler can use in order to map the token to nfa instance.
+The compiler reads the parsed input and produce nfa result.
 The nfa module uses epsilon transitions in order to implement its union/concat/iterations(kleene star) .
 
 # How to contribute?
 That’s easy, just open an issue giving more information about your future contribution.
 
 ## I want to build it from source, how?
-@TODO
+Download cmake version 3.7 or higher
+Run cmake <path to refa source code folder>
 
 ## How can I run the unit tests?
-@TODO
+First execute the build from source steps
+Run make
+run ./testRunner
 	
 # Roadmap
 
